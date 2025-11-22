@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roshan Dhamala - AI & Tech Professional Portfolio</title>
+    <meta name="description" content="Roshan Dhamala - Expert in AI Tools, Hardware & Networking, Video Editing, and Digital Solutions. Professional portfolio showcasing technical skills and projects.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Core Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <script src="https://unpkg.com/splitting@1.0.6/dist/splitting.js"></script>
+    <link href="https://unpkg.com/splitting@1.0.6/dist/splitting.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-dark: #0a0a0a;
+            --secondary-dark: #1a1a1a;
+            --accent-cyan: #00ffff;
+            --accent-purple: #8b5cf6;
+            --accent-green: #00ff88;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --glass-overlay: rgba(255, 255, 255, 0.05);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--primary-dark);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+        
+        .font-orbitron { font-family: 'Orbitron', monospace; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        
+        /* Glassmorphism */
+        .glass {
+            background: var(--glass-overlay);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Neon Effects */
+        .neon-cyan { 
+            box-shadow: 0 0 20px var(--accent-cyan), 0 0 40px var(--accent-cyan), 0 0 60px var(--accent-cyan);
+        }
+        
+        .neon-purple { 
+            box-shadow: 0 0 20px var(--accent-purple), 0 0 40px var(--accent-purple), 0 0 60px var(--accent-purple);
+        }
+        
+        .neon-text-cyan {
+            text-shadow: 0 0 10px var(--accent-cyan), 0 0 20px var(--accent-cyan), 0 0 30px var(--accent-cyan);
+        }
+        
+        .neon-text-purple {
+            text-shadow: 0 0 10px var(--accent-purple), 0 0 20px var(--accent-purple), 0 0 30px var(--accent-purple);
+        }
+        
+        /* Background Animation */
+        #background-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        /* Scroll Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--primary-dark);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-cyan);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-purple);
+        }
+        
+        /* Navigation */
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-cyan);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* Hero Section */
+        .hero-bg {
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            position: relative;
+        }
+        
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('resources/hero-bg.jpg') center/cover;
+            opacity: 0.3;
+            z-index: -1;
+        }
+        
+        /* Profile Image */
+        .profile-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 3px solid var(--accent-cyan);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+            object-fit: cover;
+        }
+        
+        /* Buttons */
+        .btn-neon {
+            position: relative;
+            padding: 12px 30px;
+            background: transparent;
+            border: 2px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .btn-neon:hover {
+            background: var(--accent-cyan);
+            color: var(--primary-dark);
+            box-shadow: 0 0 20px var(--accent-cyan);
+        }
+        
+        .btn-neon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-neon:hover::before {
+            left: 100%;
+        }
+        
+        /* Cards */
+        .skill-card {
+            background: var(--glass-overlay);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .skill-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 20px 40px rgba(0, 255, 255, 0.2);
+        }
+        
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+        }
+        
+        /* Progress Bars */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+            border-radius: 4px;
+            transition: width 1s ease;
+            position: relative;
+        }
+        
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        /* Project Cards */
+        .project-card {
+            background: var(--glass-overlay);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .project-card:hover {
+            transform: scale(1.05);
+            border-color: var(--accent-purple);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.2);
+        }
+        
+        .project-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .project-card:hover .project-image {
+            transform: scale(1.1);
+        }
+        
+        /* Contact Form */
+        .form-input {
+            background: var(--glass-overlay);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+        
+        .form-input::placeholder {
+            color: var(--text-secondary);
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--secondary-dark);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem 0;
+            text-align: center;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .profile-image {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .btn-neon {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* Loading Animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loader-circle {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid var(--accent-cyan);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loader" id="loader">
+        <div class="loader-circle"></div>
+    </div>
+    
+    <!-- Background Canvas -->
+    <canvas id="background-canvas"></canvas>
+    
+    <!-- Navigation -->
+    <nav class="glass fixed top-0 left-0 right-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="font-orbitron text-xl font-bold neon-text-cyan">
+                    Roshan Dhamala
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="nav-link text-white hover:text-cyan-400">Home</a>
+                    <a href="#about" class="nav-link text-white hover:text-cyan-400">About</a>
+                    <a href="#skills" class="nav-link text-white hover:text-cyan-400">Skills</a>
+                    <a href="#ai-tools" class="nav-link text-white hover:text-cyan-400">AI Tools</a>
+                    <a href="#projects" class="nav-link text-white hover:text-cyan-400">Projects</a>
+                    <a href="#services" class="nav-link text-white hover:text-cyan-400">Services</a>
+                    <a href="#contact" class="nav-link text-white hover:text-cyan-400">Contact</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-90 z-40 hidden">
+        <div class="flex flex-col items-center justify-center h-full space-y-8">
+            <a href="#home" class="text-2xl text-white hover:text-cyan-400 mobile-link">Home</a>
+            <a href="#about" class="text-2xl text-white hover:text-cyan-400 mobile-link">About</a>
+            <a href="#skills" class="text-2xl text-white hover:text-cyan-400 mobile-link">Skills</a>
+            <a href="#ai-tools" class="text-2xl text-white hover:text-cyan-400 mobile-link">AI Tools</a>
+            <a href="#projects" class="text-2xl text-white hover:text-cyan-400 mobile-link">Projects</a>
+            <a href="#services" class="text-2xl text-white hover:text-cyan-400 mobile-link">Services</a>
+            <a href="#contact" class="text-2xl text-white hover:text-cyan-400 mobile-link">Contact</a>
+        </div>
+    </div>
+    
+    <!-- Hero Section -->
+    <section id="home" class="hero-bg min-h-screen flex items-center justify-center relative">
+        <div class="container mx-auto px-6 text-center">
+            <div class="mb-8">
+                <img src="resources/profile.jpg" alt="Roshan Dhamala" class="profile-image mx-auto mb-6" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjMWEwYTJhIi8+CjxjaXJjbGUgY3g9IjEwMCIgY3k9IjEwMCIgcj0iNzAiIGZpbGw9IiMxYTBiMmYiLz4KPHN2ZyB4PSI2NSIgeT0iNjUiIHdpZHRoPSI3MCIgaGVpZ2h0PSI3MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjMDBmZmZmIj4KPHBhdGggZD0iTTEyIDEyYzIuMjEgMCA0LTEuNzkgNC00cy0xLjc5LTQtNC00LTQgMS43OS00IDQgMS43OSA0IDQgNHptMCAyYy0yLjY3IDAtOCAxLjM0LTggNHYyaDE2di0yYzAtMi42Ni01LjMzLTQtOC00eiIvPgo8L3N2Zz4KPC9zdmc+'">
+            </div>
+            <h1 class="hero-title font-orbitron text-5xl md:text-7xl font-bold mb-4">
+                <span class="neon-text-cyan">Roshan</span> <span class="neon-text-purple">Dhamala</span>
+            </h1>
+            <div class="hero-subtitle text-xl md:text-2xl mb-8 text-gray-300">
+                <span id="typed-text"></span>
+            </div>
+            <p class="text-lg mb-8 max-w-2xl mx-auto text-gray-400">
+                Expert in AI Tools, Hardware & Networking, Video Editing, and Digital Solutions. 
+                Transforming ideas into reality with cutting-edge technology and creative innovation.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button class="btn-neon" onclick="scrollToSection('contact')">Hire Me</button>
+                <button class="btn-neon" onclick="downloadCV()">Download CV</button>
+                <button class="btn-neon" onclick="scrollToSection('projects')">View Projects</button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- About Section -->
+    <section id="about" class="py-20 reveal">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-orbitron font-bold text-center mb-12 neon-text-cyan">About Me</h2>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <img src="resources/profile.jpg" alt="Roshan Dhamala" class="w-80 h-80 rounded-lg object-cover mx-auto glass" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjMyMCIgdmlld0JveD0iMCAwIDMyMCAzMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMjAiIGhlaWdodD0iMzIwIiBmaWxsPSIjMWEwYTJhIi8+CjxjaXJjbGUgY3g9IjE2MCIgY3k9IjE2MCIgcj0iMTAwIiBmaWxsPSIjMWEwYjJmIi8+CjxzdmcgeD0iMTMwIiB5PSIxMzAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjMDBmZmZmIj4KPHBhdGggZD0iTTEyIDEyYzIuMjEgMCA0LTEuNzkgNC00cy0xLjc5LTQtNC00LTQgMS43OS00IDQgMS43OSA0IDQgNHptMCAyYy0yLjY3IDAtOCAxLjM0LTggNHYyaDE2di0yYzAtMi42Ni01LjMzLTQtOC00eiIvPgo8L3N2Zz4KPC9zdmc+'">
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold mb-4">Hi, I'm Roshan Dhamala</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        A passionate technology enthusiast and AI tools expert based in Itahari-2, Nepal. 
+                        With extensive experience in hardware & networking, video editing, and cutting-edge AI tools, 
+                        I help businesses and individuals leverage technology to achieve their goals.
+                    </p>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        My expertise spans across multiple domains including network engineering, 
+                        digital design, video production, and AI-powered solutions. I'm constantly 
+                        exploring new technologies and tools to stay at the forefront of innovation.
+                    </p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="glass p-4 rounded-lg">
+                            <h4 class="font-bold text-cyan-400 mb-2">Location</h4>
+                            <p class="text-sm text-gray-400">Itahari-2, Nepal</p>
+                        </div>
+                        <div class="glass p-4 rounded-lg">
+                            <h4 class="font-bold text-purple-400 mb-2">Experience</h4>
+                            <p class="text-sm text-gray-400">5+ Years</p>
+                        </div>
+                        <div class="glass p-4 rounded-lg">
+                            <h4 class="font-bold text-green-400 mb-2">Email</h4>
+                            <p class="text-sm text-gray-400">openmindroshan@gmail.com</p>
+                        </div>
+                        <div class="glass p-4 rounded-lg">
+                            <h4 class="font-bold text-yellow-400 mb-2">Phone</h4>
+                            <p class="text-sm text-gray-400">9823803417</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 reveal">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-orbitron font-bold text-center mb-12 neon-text-purple">My Skills</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Hardware & Networking -->
+                <div class="skill-card">
+                    <div class="text-4xl mb-4">🔧</div>
+                    <h3 class="text-xl font-bold mb-4 text-cyan-400">Hardware & Networking</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">Hardware Troubleshooting</span>
+                                <span class="text-sm text-cyan-400">95%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">Network Configuration</span>
+                                <span class="text-sm text-cyan-400">90%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">VPN Setup & Management</span>
+                                <span class="text-sm text-cyan-400">85%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Video Editing -->
+                <div class="skill-card">
+                    <div class="text-4xl mb-4">🎬</div>
+                    <h3 class="text-xl font-bold mb-4 text-purple-400">Video Editing</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">CapCut Pro</span>
+                                <span class="text-sm text-purple-400">95%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">YouCut</span>
+                                <span class="text-sm text-purple-400">90%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">InShot</span>
+                                <span class="text-sm text-purple-400">88%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 88%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Design Tools -->
+                <div class="skill-card">
+                    <div class="text-4xl mb-4">🎨</div>
+                    <h3 class="text-xl font-bold mb-4 text-green-400">Design Tools</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">Canva Pro</span>
+                                <span class="text-sm text-green-400">92%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 92%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">Image Generation</span>
+                                <span class="text-sm text-green-400">85%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">PDF Generation</span>
+                                <span class="text-sm text-green-400">80%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Programming -->
+                <div class="skill-card">
+                    <div class="text-4xl mb-4">💻</div>
+                    <h3 class="text-xl font-bold mb-4 text-yellow-400">Programming</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">Python Basics</span>
+                                <span class="text-sm text-yellow-400">75%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">HTML/CSS</span>
+                                <span class="text-sm text-yellow-400">70%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 70%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">JavaScript Basics</span>
+                                <span class="text-sm text-yellow-400">65%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Digital Tools -->
+                <div class="skill-card">
+                    <div class="text-4xl mb-4">🛠️</div>
+                    <h3 class="text-xl font-bold mb-4 text-pink-400">Digital Tools</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">Microsoft Office</span>
+                                <span class="text-sm text-pink-400">90%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">Google Workspace</span>
+                                <span class="text-sm text-pink-400">88%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 88%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">Cloud Services</span>
+                                <span class="text-sm text-pink-400">82%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 82%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Communication -->
+                <div class="skill-card">
+                    <div class="text-4xl mb-4">📞</div>
+                    <h3 class="text-xl font-bold mb-4 text-indigo-400">Communication</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">Technical Writing</span>
+                                <span class="text-sm text-indigo-400">85%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">Client Support</span>
+                                <span class="text-sm text-indigo-400">95%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">Team Collaboration</span>
+                                <span class="text-sm text-indigo-400">90%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 90%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- AI Tools Section -->
+    <section id="ai-tools" class="py-20 reveal">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-orbitron font-bold text-center mb-12 neon-text-green">AI Tools Expertise</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="glass p-6 rounded-lg text-center hover:border-cyan-400 transition-all duration-300 border border-transparent">
+                    <div class="text-3xl mb-3">🤖</div>
+                    <h3 class="font-bold text-cyan-400 mb-2">ChatGPT</h3>
+                    <p class="text-sm text-gray-400">Advanced conversational AI</p>
+                </div>
+                <div class="glass p-6 rounded-lg text-center hover:border-purple-400 transition-all duration-300 border border-transparent">
+                    <div class="text-3xl mb-3">🔍</div>
+                    <h3 class="font-bold text-purple-400 mb-2">Perplexity</h3>
+                    <p class="text-sm text-gray-400">AI-powered search engine</p>
+                </div>
+                <div class="glass p-6 rounded-lg text-center hover:border-green-400 transition-all duration-300 border border-transparent">
+                    <div class="text-3xl mb-3">🧠</div>
+                    <h3 class="font-bold text-green-400 mb-2">Claude</h3>
+                    <p class="text-sm text-gray-400">Anthropic's AI assistant</p>
+                </div>
+                <div class="glass p-6 rounded-lg text-center hover:border-yellow-400 transition-all duration-300 border border-transparent">
+                    <div class="text-3xl mb-3">⭐</div>
+                    <h3 class="font-bold text-yellow-400 mb-2">Gemini</h3>
+                    <p class="text-sm text-gray-400">Google's multimodal AI</p>
+                </div>
+                <div class="glass p-6 rounded-lg text-center hover:border-pink-400 transition-all duration-300 border border-transparent">
+                    <div class="text-3xl mb-3">🎨</div>
+                    <h3 class="font-bold text-pink-400 mb-2">Midjourney</h3>
+                    <p class="text-sm text-gray-400">AI image generation</p>
+                </div>
+                <div class="glass p-6 rounded-lg text-center hover:border-indigo-400 transition-all duration-300 border border-transparent">
+                    <div class="text-3xl mb-3">📝</div>
+                    <h3 class="font-bold text-indigo-400 mb-2">DeepSeek</h3>
+                    <p class="text-sm text-gray-400">Advanced language model</p>
+                </div>
+                <div class="glass p-6 rounded-lg text-center hover:border-red-400 transition-all duration-300 border border-transparent">
+                    <div class="text-3xl mb-3">💬</div>
+                    <h3 class="font-bold text-red-400 mb-2">Poe</h3>
+                    <p class="text-sm text-gray-400">AI chat platform</p>
+                </div>
+                <div class="glass p-6 rounded-lg text-center hover:border-orange-400 transition-all duration-300 border border-transparent">
+                    <div class="text-3xl mb-3">🌟</div>
+                    <h3 class="font-bold text-orange-400 mb-2">Grok</h3>
+                    <p class="text-sm text-gray-400">xAI's conversational AI</p>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                <p class="text-gray-400 mb-6">And many more including Qwen, Google Studio, Microsoft Bing AI, Ernie, Kimi AI...</p>
+                <button class="btn-neon" onclick="showAIToolsDetails()">View All AI Tools</button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 reveal">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-orbitron font-bold text-center mb-12 neon-text-cyan">My Projects</h2>
+            
+            <!-- Project Filter -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <button class="filter-btn active px-6 py-2 rounded-full glass hover:border-cyan-400 transition-all duration-300 border border-transparent" data-filter="all">All Projects</button>
+                <button class="filter-btn px-6 py-2 rounded-full glass hover:border-purple-400 transition-all duration-300 border border-transparent" data-filter="ai">AI Tools</button>
+                <button class="filter-btn px-6 py-2 rounded-full glass hover:border-green-400 transition-all duration-300 border border-transparent" data-filter="hardware">Hardware</button>
+                <button class="filter-btn px-6 py-2 rounded-full glass hover:border-yellow-400 transition-all duration-300 border border-transparent" data-filter="design">Design</button>
+                <button class="filter-btn px-6 py-2 rounded-full glass hover:border-pink-400 transition-all duration-300 border border-transparent" data-filter="video">Video</button>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-grid">
+                <!-- AI Project 1 -->
+                <div class="project-card" data-category="ai">
+                    <img src="https://kimi-web-img.moonshot.cn/img/static.vecteezy.com/96c6e66ec45c4c23f747a38bc8842860b2c85e8d.jpg" alt="AI Neural Network" class="project-image">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-cyan-400">AI Content Generator</h3>
+                        <p class="text-gray-400 mb-4">Automated content creation system using multiple AI tools for blogs, social media, and marketing materials.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-3 py-1 bg-cyan-500 bg-opacity-20 text-cyan-400 rounded-full text-sm">ChatGPT</span>
+                            <span class="px-3 py-1 bg-purple-500 bg-opacity-20 text-purple-400 rounded-full text-sm">Midjourney</span>
+                            <span class="px-3 py-1 bg-green-500 bg-opacity-20 text-green-400 rounded-full text-sm">Python</span>
+                        </div>
+                        <button class="btn-neon text-sm py-2 px-4" onclick="showProjectDetails('ai-content-generator')">View Details</button>
+                    </div>
+                </div>
+                
+                <!-- Hardware Project -->
+                <div class="project-card" data-category="hardware">
+                    <img src="https://kimi-web-img.moonshot.cn/img/thumbs.dreamstime.com/b992aa8b40f51d3a81a94c6c674c6eef2a7a5e10.jpg" alt="Network Setup" class="project-image">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-purple-400">Office Network Infrastructure</h3>
+                        <p class="text-gray-400 mb-4">Complete network setup for small office including VPN configuration, security implementation, and hardware optimization.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-3 py-1 bg-purple-500 bg-opacity-20 text-purple-400 rounded-full text-sm">Cisco</span>
+                            <span class="px-3 py-1 bg-blue-500 bg-opacity-20 text-blue-400 rounded-full text-sm">VPN</span>
+                            <span class="px-3 py-1 bg-green-500 bg-opacity-20 text-green-400 rounded-full text-sm">Security</span>
+                        </div>
+                        <button class="btn-neon text-sm py-2 px-4" onclick="showProjectDetails('office-network')">View Details</button>
+                    </div>
+                </div>
+                
+                <!-- Design Project -->
+                <div class="project-card" data-category="design">
+                    <img src="https://kimi-web-img.moonshot.cn/img/wp-media-design-studio.s3.us-east-1.amazonaws.com/438c39a4d4f49b4ead320ca21891ef2f4e4af188.jpeg" alt="UI Design" class="project-image">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-green-400">Brand Identity Package</h3>
+                        <p class="text-gray-400 mb-4">Complete brand identity design including logo, business cards, social media assets, and marketing materials.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-3 py-1 bg-green-500 bg-opacity-20 text-green-400 rounded-full text-sm">Canva</span>
+                            <span class="px-3 py-1 bg-pink-500 bg-opacity-20 text-pink-400 rounded-full text-sm">Photoshop</span>
+                            <span class="px-3 py-1 bg-yellow-500 bg-opacity-20 text-yellow-400 rounded-full text-sm">Branding</span>
+                        </div>
+                        <button class="btn-neon text-sm py-2 px-4" onclick="showProjectDetails('brand-identity')">View Details</button>
+                    </div>
+                </div>
+                
+                <!-- Video Project -->
+                <div class="project-card" data-category="video">
+                    <img src="https://kimi-web-img.moonshot.cn/img/images.stockcake.com/cf6364268f1f23cb899b2849c344d83c2880d09a.jpg" alt="Video Editing" class="project-image">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-yellow-400">Promotional Video Series</h3>
+                        <p class="text-gray-400 mb-4">Series of promotional videos for local businesses including editing, color grading, and motion graphics.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-3 py-1 bg-yellow-500 bg-opacity-20 text-yellow-400 rounded-full text-sm">CapCut</span>
+                            <span class="px-3 py-1 bg-red-500 bg-opacity-20 text-red-400 rounded-full text-sm">Motion Graphics</span>
+                            <span class="px-3 py-1 bg-blue-500 bg-opacity-20 text-blue-400 rounded-full text-sm">Color Grading</span>
+                        </div>
+                        <button class="btn-neon text-sm py-2 px-4" onclick="showProjectDetails('promotional-videos')">View Details</button>
+                    </div>
+                </div>
+                
+                <!-- AI Project 2 -->
+                <div class="project-card" data-category="ai">
+                    <img src="https://kimi-web-img.moonshot.cn/img/web-camp.io/302a5a88270d9a8e90a3ae199d5ab7668bdc0d2b.jpg" alt="AI Dashboard" class="project-image">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-cyan-400">AI Tools Dashboard</h3>
+                        <p class="text-gray-400 mb-4">Unified dashboard for managing multiple AI tools, API integrations, and automated workflows.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-3 py-1 bg-cyan-500 bg-opacity-20 text-cyan-400 rounded-full text-sm">React</span>
+                            <span class="px-3 py-1 bg-purple-500 bg-opacity-20 text-purple-400 rounded-full text-sm">APIs</span>
+                            <span class="px-3 py-1 bg-green-500 bg-opacity-20 text-green-400 rounded-full text-sm">Automation</span>
+                        </div>
+                        <button class="btn-neon text-sm py-2 px-4" onclick="showProjectDetails('ai-dashboard')">View Details</button>
+                    </div>
+                </div>
+                
+                <!-- Hardware Project 2 -->
+                <div class="project-card" data-category="hardware">
+                    <img src="https://kimi-web-img.moonshot.cn/img/images.stockcake.com/b48e2b2cd4a1740658d06aa3437686330ac1aeb2.jpg" alt="Tech Setup" class="project-image">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-purple-400">Home Automation System</h3>
+                        <p class="text-gray-400 mb-4">Smart home automation setup with voice control, security integration, and energy optimization.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-3 py-1 bg-purple-500 bg-opacity-20 text-purple-400 rounded-full text-sm">IoT</span>
+                            <span class="px-3 py-1 bg-blue-500 bg-opacity-20 text-blue-400 rounded-full text-sm">Voice Control</span>
+                            <span class="px-3 py-1 bg-green-500 bg-opacity-20 text-green-400 rounded-full text-sm">Automation</span>
+                        </div>
+                        <button class="btn-neon text-sm py-2 px-4" onclick="showProjectDetails('home-automation')">View Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Services Section -->
+    <section id="services" class="py-20 reveal">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-orbitron font-bold text-center mb-12 neon-text-purple">Services I Offer</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="glass p-8 rounded-lg text-center hover:border-cyan-400 transition-all duration-300 border border-transparent">
+                    <div class="text-5xl mb-4">🔧</div>
+                    <h3 class="text-xl font-bold mb-4 text-cyan-400">Hardware & Networking</h3>
+                    <ul class="text-gray-400 space-y-2 text-sm">
+                        <li>Computer Repair & Maintenance</li>
+                        <li>Network Setup & Configuration</li>
+                        <li>VPN Installation & Management</li>
+                        <li>Hardware Troubleshooting</li>
+                        <li>System Optimization</li>
+                    </ul>
+                    <button class="btn-neon mt-6 text-sm py-2 px-4" onclick="showServiceDetails('hardware-networking')">Learn More</button>
+                </div>
+                
+                <div class="glass p-8 rounded-lg text-center hover:border-purple-400 transition-all duration-300 border border-transparent">
+                    <div class="text-5xl mb-4">🎬</div>
+                    <h3 class="text-xl font-bold mb-4 text-purple-400">Video Editing</h3>
+                    <ul class="text-gray-400 space-y-2 text-sm">
+                        <li>Professional Video Editing</li>
+                        <li>Color Grading & Correction</li>
+                        <li>Motion Graphics & Effects</li>
+                        <li>Social Media Content</li>
+                        <li>Promotional Videos</li>
+                    </ul>
+                    <button class="btn-neon mt-6 text-sm py-2 px-4" onclick="showServiceDetails('video-editing')">Learn More</button>
+                </div>
+                
+                <div class="glass p-8 rounded-lg text-center hover:border-green-400 transition-all duration-300 border border-transparent">
+                    <div class="text-5xl mb-4">🎨</div>
+                    <h3 class="text-xl font-bold mb-4 text-green-400">Digital Design</h3>
+                    <ul class="text-gray-400 space-y-2 text-sm">
+                        <li>Brand Identity Design</li>
+                        <li>Social Media Graphics</li>
+                        <li>Marketing Materials</li>
+                        <li>Logo & Business Cards</li>
+                        <li>Print Design</li>
+                    </ul>
+                    <button class="btn-neon mt-6 text-sm py-2 px-4" onclick="showServiceDetails('digital-design')">Learn More</button>
+                </div>
+                
+                <div class="glass p-8 rounded-lg text-center hover:border-yellow-400 transition-all duration-300 border border-transparent">
+                    <div class="text-5xl mb-4">🤖</div>
+                    <h3 class="text-xl font-bold mb-4 text-yellow-400">AI Solutions</h3>
+                    <ul class="text-gray-400 space-y-2 text-sm">
+                        <li>AI Tool Integration</li>
+                        <li>Content Generation</li>
+                        <li>Automation Workflows</li>
+                        <li>Custom AI Solutions</li>
+                        <li>Training & Consultation</li>
+                    </ul>
+                    <button class="btn-neon mt-6 text-sm py-2 px-4" onclick="showServiceDetails('ai-solutions')">Learn More</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 reveal">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-orbitron font-bold text-center mb-12 neon-text-cyan">Get In Touch</h2>
+            <div class="grid md:grid-cols-2 gap-12">
+                <!-- Contact Form -->
+                <div>
+                    <form id="contact-form" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Name</label>
+                            <input type="text" name="name" class="form-input" placeholder="Your Name" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Email</label>
+                            <input type="email" name="email" class="form-input" placeholder="Your Email" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Subject</label>
+                            <input type="text" name="subject" class="form-input" placeholder="Subject" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Message</label>
+                            <textarea name="message" rows="5" class="form-input" placeholder="Your Message" required></textarea>
+                        </div>
+                        <button type="submit" class="btn-neon w-full">Send Message</button>
+                    </form>
+                </div>
+                
+                <!-- Contact Info -->
+                <div>
+                    <h3 class="text-2xl font-bold mb-6">Contact Information</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 glass rounded-full flex items-center justify-center">
+                                <span class="text-cyan-400">📍</span>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Location</h4>
+                                <p class="text-gray-400">Itahari-2, Nepal</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 glass rounded-full flex items-center justify-center">
+                                <span class="text-purple-400">📧</span>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Email</h4>
+                                <p class="text-gray-400">openmindroshan@gmail.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 glass rounded-full flex items-center justify-center">
+                                <span class="text-green-400">📞</span>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Phone</h4>
+                                <p class="text-gray-400">9823803417</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 glass rounded-full flex items-center justify-center">
+                                <span class="text-yellow-400">⏰</span>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Availability</h4>
+                                <p class="text-gray-400">Monday - Friday: 9AM - 6PM</p>
+                                <p class="text-gray-400">Saturday: 10AM - 4PM</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Social Links -->
+                    <div class="mt-8">
+                        <h4 class="font-bold mb-4">Connect With Me</h4>
+                        <div class="flex space-x-4">
+                            <a href="#" class="w-12 h-12 glass rounded-full flex items-center justify-center hover:border-cyan-400 transition-all duration-300 border border-transparent">
+                                <span class="text-cyan-400">💼</span>
+                            </a>
+                            <a href="#" class="w-12 h-12 glass rounded-full flex items-center justify-center hover:border-purple-400 transition-all duration-300 border border-transparent">
+                                <span class="text-purple-400">🐦</span>
+                            </a>
+                            <a href="#" class="w-12 h-12 glass rounded-full flex items-center justify-center hover:border-green-400 transition-all duration-300 border border-transparent">
+                                <span class="text-green-400">📘</span>
+                            </a>
+                            <a href="#" class="w-12 h-12 glass rounded-full flex items-center justify-center hover:border-yellow-400 transition-all duration-300 border border-transparent">
+                                <span class="text-yellow-400">📷</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container mx-auto px-6">
+            <div class="text-center">
+                <div class="font-orbitron text-xl font-bold mb-4 neon-text-cyan">Roshan Dhamala</div>
+                <p class="text-gray-400 mb-4">© 2024 Roshan Dhamala. All rights reserved.</p>
+                <p class="text-sm text-gray-500">Built with ❤️ using modern web technologies</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- JavaScript -->
+    <script src="main.js"></script>
+</body>
+</html>
